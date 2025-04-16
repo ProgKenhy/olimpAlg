@@ -7,7 +7,7 @@ vector<vector<int>> all_permutation;
 vector<int> permutation;
 
 
-void search(int n, vector<bool>& chosen, vector<int>& subset) {
+void search(int n, vector<bool>& chosen) {
 	if (permutation.size() == n) {
 		all_permutation.push_back(permutation);
 	}
@@ -16,7 +16,7 @@ void search(int n, vector<bool>& chosen, vector<int>& subset) {
 			if (chosen[i]) continue;
 			chosen[i] = true;
 			permutation.push_back(i);
-			search(n, chosen, subset);
+			search(n, chosen);
 			chosen[i] = false;
 			permutation.pop_back();
 		}
@@ -29,8 +29,7 @@ int main() {
 	cin.tie(0);
 	const int n = 3;
 	vector<bool> chosen(n + 1, false);
-	vector<int> subset;
-	search(n, chosen, subset);
+	search(n, chosen);
 	for (int i = 0; i < all_permutation.size(); i++) {
 		for (int j = 0; j < all_permutation[i].size(); j++)
 			cout << all_permutation[i][j];
