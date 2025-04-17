@@ -5,6 +5,18 @@
 using namespace std;
 
 
+ll binary_search(vector<ll> v, ll x) {
+    ll a = 0, k = 0;
+    ll b = sz(v) - 1;
+    while (a <= b)
+    {
+        k = (a + b)/2;
+        if (v[k] == x) return k;
+        if (v[k] < x) a = k + 1;
+        else b = k - 1;
+    }
+}
+
 void search(vector <int> arr) {
 	for (int i = 0; i < arr.size(); i++)
 	{

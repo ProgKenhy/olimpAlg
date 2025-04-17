@@ -4,16 +4,13 @@
 #include <climits>
 #include <cmath>
 #include <iomanip>
-#include <queue>
 using namespace std;
 
-typedef unsigned long long ull;
 typedef long long ll;
+typedef unsigned long long ull;
 typedef long double ld;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
-typedef priority_queue<int> pq;
-typedef priority_queue<int, vector<int>, greater<int>> pqr;
 
 const int INF = 1e9 + 7;
 const ll LINF = 1e18;
@@ -32,15 +29,33 @@ const double PI = 3.14159265358979323846;
 #define sz(x) ((int)(x).size())
 
 
-void solve() {
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    for (ll& x : v) cin >> x;
+bool valid(ull fin_time, vector<ll> v, ll n) {
+    ll done_t = 0;
+    REP(i, sz(v)) {
+        done_t += fin_time / v[i];
+    }
+    return done_t >= n;
+}
 
-    sort(all(v));
-    for (ll x : v) cout << x << " ";
-    cout << endl;
+void solve() {
+    ll m, n;
+    ll best_time = INT32_MAX;
+    cin >> m >> n;
+    vector<ll> v(m);
+    for (ll& x : v) {
+        cin >> x;
+        best_time = min(x, best_time);
+    }
+
+
+    ull ans = -1;
+    ull fin_time = ull(best_time) * n;
+    for (ull b = fin_time; b >= 1; b /= 2) {
+        while (!valid(ans + b, v, n)) ans += b;
+    }
+    ans += 1;
+
+    cout << ans;
 }
 
 int main() {
