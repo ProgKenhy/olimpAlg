@@ -1,5 +1,3 @@
-#pragma GCC optimize("O2")
-#pragma GCC target("avx")
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -7,13 +5,11 @@
 #include <cmath>
 #include <iomanip>
 #include <queue>
-#include <fstream>
 using namespace std;
 
 typedef unsigned long long ull;
 typedef long long ll;
 typedef long double ld;
-typedef vector<ll> vtl;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef priority_queue<int> pq;
@@ -21,6 +17,7 @@ typedef priority_queue<int, vector<int>, greater<int>> pqr;
 
 const int INF = INT32_MAX;
 const ll LINF = LLONG_MAX;
+const ull ULINF = ULLONG_MAX;
 const double PI = 3.14159265358979323846;
 
 #define fastio ios::sync_with_stdio(0); cin.tie(0); cout.tie(0)
@@ -36,13 +33,29 @@ const double PI = 3.14159265358979323846;
 #define sz(x) ((int)(x).size())
 
 
+ull foo(ull s, ull cur_s, vector<ull> coins) {
+    vector <ull> value(s + 1, ULINF);
+    value[0] = 0;
+
+    for (ull i=1; i <= s; i++)
+        for(auto coin : coins){
+            if (coin <= i and value[i - coin] != ULINF)
+                value[i] = min(value[i], value[i - coin] + 1);
+        }
+
+    return value[s];
+}
+
+
+
 void solve() {
-//    ifstream file("test_input.txt");
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    for (ll& x : v) cin >> x;
-//    file.close();
+    ull n, s, cur_s = 0;
+    cin >> n >> s;
+    vector<ull> coins(n);
+    for (ull& x : coins) cin >> x;
+    ull ans = foo(s, cur_s, coins);
+    if (ans == ULINF) cout << -1;
+    else cout << ans;
 }
 
 int main() {

@@ -21,7 +21,7 @@ typedef priority_queue<int, vector<int>, greater<int>> pqr;
 
 const int INF = INT32_MAX;
 const ll LINF = LLONG_MAX;
-const double PI = 3.14159265358979323846;
+const double PI = atan(1) * 4;
 
 #define fastio ios::sync_with_stdio(0); cin.tie(0); cout.tie(0)
 #define precision(x) cout << fixed << setprecision(x)
@@ -35,19 +35,31 @@ const double PI = 3.14159265358979323846;
 #define all(x) (x).begin(), (x).end()
 #define sz(x) ((int)(x).size())
 
+const int MOD = 1e9 + 7;
 
 void solve() {
-//    ifstream file("test_input.txt");
-    ll n;
-    cin >> n;
-    vector<ll> v(n);
-    for (ll& x : v) cin >> x;
-//    file.close();
+    int n, m;
+    cin >> n >> m;
+    double result = 1;
+
+
+    if ((n == 1 and m == 1) or ((n * m) % 2 == 1)) result = 0;
+
+    for (int a = 1; a <= n/2; ++a) {
+        for (int b = 1; b <= m/2; ++b) {
+            double cos_a = cos(PI * a / (n + 1));
+            double cos_b = cos(PI * b / (m + 1));
+            double term = 4 * cos_a * cos_a + 4 * cos_b * cos_b;
+            result *= term ;
+        }
+    }
+
+    cout << ull(result) % MOD << endl;
 }
 
 int main() {
     fastio;
-    precision(6);
+    precision(0);
 
     int t = 1;
     while (t--) {

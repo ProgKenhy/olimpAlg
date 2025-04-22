@@ -37,12 +37,31 @@ const double PI = 3.14159265358979323846;
 
 
 void solve() {
-//    ifstream file("test_input.txt");
-    ll n;
-    cin >> n;
+    ll n, x;
+    cin >> n >> x;
     vector<ll> v(n);
     for (ll& x : v) cin >> x;
-//    file.close();
+
+    vector<pll> best(1LL << n);
+    best[0] = { 0, 0 };
+    FOR(mask, 1, (1LL << n)) {
+        best[mask] = { INF, 0 };
+        REP(i, n) {
+            if (mask & (1LL << i)) {
+                auto option = best[mask ^ (1LL << i)];
+                if (option.second + v[i] <= x) {
+                    option.second += v[i];
+                }
+                else {
+                    option.second = v[i];
+                    option.first += 1;
+                }
+                if (mask == (1LL << i)) option = { 1, v[i] };
+                best[mask] = min(best[mask], option);
+            }
+        }
+    }
+    cout << best[(1LL << n) - 1].first << '\n';
 }
 
 int main() {

@@ -13,7 +13,6 @@ using namespace std;
 typedef unsigned long long ull;
 typedef long long ll;
 typedef long double ld;
-typedef vector<ll> vtl;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef priority_queue<int> pq;
@@ -37,12 +36,28 @@ const double PI = 3.14159265358979323846;
 
 
 void solve() {
-//    ifstream file("test_input.txt");
-    ll n;
+    //    ifstream file("test_input.txt");
+    ll n, m = 0;
     cin >> n;
     vector<ll> v(n);
-    for (ll& x : v) cin >> x;
-//    file.close();
+    for (ll& x : v) { cin >> x; m += x; }
+    vector<bool> possible(m + 1, false);
+    possible[0] = true;
+    for (ll j = 0; j <= n; j++) {
+        for (ll i = m; i >= v[j]; i--) {
+            possible[i] = possible[i] || possible[i - v[j]];
+        }
+    }
+
+    vector<ll> ans;
+    for (ll i = 1; i <= m; i++)
+    {
+        if (possible[i]) ans.push_back(i);
+    }
+    cout << sz(ans) << '\n';
+    for (ll i = 0; i < sz(ans); i++)
+        cout << ans[i] << ' ';
+        //file.close();
 }
 
 int main() {

@@ -13,7 +13,6 @@ using namespace std;
 typedef unsigned long long ull;
 typedef long long ll;
 typedef long double ld;
-typedef vector<ll> vtl;
 typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef priority_queue<int> pq;
@@ -37,12 +36,36 @@ const double PI = 3.14159265358979323846;
 
 
 void solve() {
-//    ifstream file("test_input.txt");
-    ll n;
+    //    ifstream file("test_input.txt");
+    ll n, m = 0;
     cin >> n;
     vector<ll> v(n);
-    for (ll& x : v) cin >> x;
-//    file.close();
+    for (ll& x : v) { cin >> x; m += x; }
+    vector<vector<bool>> possible (m+1, vector<bool>(n+1, false));
+    possible[0][0] = true;
+    for (ll j = 1; j <= n; j++) {
+        ll cur_weight = v[j - 1];  // Берем (j-1)-й элемент, так как v индексируется с 0
+        for (ll i = 0; i <= m; i++) {
+            // Вариант, когда не берем текущий элемент
+            possible[i][j] = possible[i][j - 1];
+
+            // Вариант, когда берем текущий элемент
+            if (i >= cur_weight) {
+                possible[i][j] = possible[i][j] || possible[i - cur_weight][j - 1];
+            }
+        }
+    }
+
+    ll count = 0;
+    vector<ll> ans;
+    for (ll i = 1; i <= m; i++)
+    {
+        if (possible[i][n]) ans.push_back(i);
+    }
+    cout << sz(ans) << '\n';
+    for (ll i = 0; i < sz(ans); i++)
+        cout << ans[i] << ' ';
+        //file.close();
 }
 
 int main() {
