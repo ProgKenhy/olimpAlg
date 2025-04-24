@@ -5,7 +5,7 @@
 #include <cmath>
 #include <iomanip>
 #include <queue>
-#include <fstream>
+//#include <fstream>
 using namespace std;
 
 typedef unsigned long long ull;
@@ -19,7 +19,7 @@ typedef priority_queue<int, vector<int>, greater<int>> pqr;
 
 const int INF = INT32_MAX;
 const ll LINF = LLONG_MAX;
-const double PI = 3.14159265358979323846;
+const double PI = atan(1) * 4;
 
 #define fastio ios::sync_with_stdio(0); cin.tie(0); cout.tie(0)
 #define precision(x) cout << fixed << setprecision(x)
@@ -33,19 +33,42 @@ const double PI = 3.14159265358979323846;
 #define all(x) (x).begin(), (x).end()
 #define sz(x) ((int)(x).size())
 
+const int MOD = 1e9 + 7;
 
 void solve() {
-//    ifstream file("test_input.txt");
-    ll n;
+    ll n, ans = 0;
     cin >> n;
     vector<ll> v(n);
     for (ll& x : v) cin >> x;
-//    file.close();
+
+    FOR(i, 1, sz(v)) {
+        if (v[i] == v[i - 1]) {
+            ll temp = 0;
+            FOR(b, 0, i)
+            {
+                if (v[i - b - 1] == v[i + b])
+                    temp += 2;
+                else break;
+            }
+            ans = max(ans, temp);
+        }
+        if (v[i - 1] == v[i + 1]) {
+            ll temp = 1;
+            FOR(b, 1, i + 1)
+            {
+                if (v[i - b] == v[i + b])
+                    temp += 2;
+                else break;
+            }
+            ans = max(ans, temp);
+        }
+    }
+    cout << ans;
 }
 
 int main() {
     fastio;
-    precision(6);
+    precision(0);
 
     int t = 1;
     while (t--) {
@@ -54,3 +77,4 @@ int main() {
 
     return 0;
 }
+оцени и сделай лучше если можно
