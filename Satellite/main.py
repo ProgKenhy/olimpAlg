@@ -1,9 +1,7 @@
 def solve():
     # Parse input
-    parts = input().split()
-    W = int(parts[0])
-    H = int(parts[1])
-    N = int(parts[2])
+    W, H = map(int, input().split())
+    N = int(input())
 
     photos = []
     for _ in range(N):
@@ -12,7 +10,7 @@ def solve():
 
     # If there's only one photo, Lisa can simply be there
     if N == 1:
-        return "YES"
+        return "Yes"
 
     # For each photo, calculate all possible positions
     all_positions = []
@@ -24,22 +22,22 @@ def solve():
                 positions.add((x, y))
         all_positions.append(positions)
 
-    # If any photo has no possible positions, return "NO"
+    # If any photo has no possible positions, return "No"
     if any(not positions for positions in all_positions):
-        return "NO"
+        return "No"
 
     # Use dynamic programming to track reachable positions
     # reachable[i] = set of positions for photo i that can be reached following a valid path
 
     # For the first photo, all positions are reachable (Lisa can start anywhere)
-    reachable = [all_positions[0]]
+    current_reachable = all_positions[0].copy()
 
     # Process each subsequent photo
     for i in range(1, N):
-        current_reachable = set()
+        next_reachable = set()
 
         # For each reachable position in previous photo
-        for prev_pos in reachable[-1]:
+        for prev_pos in current_reachable:
             x1, y1 = prev_pos
 
             # For each position in current photo
@@ -48,15 +46,16 @@ def solve():
 
                 # Check if positions are adjacent (Manhattan distance = 1)
                 if abs(x1 - x2) + abs(y1 - y2) == 1:
-                    current_reachable.add(curr_pos)
+                    next_reachable.add(curr_pos)
 
-        # If no positions in this photo are reachable, return "NO"
-        if not current_reachable:
-            return "NO"
+        # If no positions in this photo are reachable, return "No"
+        if not next_reachable:
+            return "No"
 
-        reachable.append(current_reachable)
+        # Update current reachable positions for the next iteration
+        current_reachable = next_reachable
 
-    return "YES"
+    return "Yes"
 
 
 print(solve())
