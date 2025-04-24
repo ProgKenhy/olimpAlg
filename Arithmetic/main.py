@@ -1,7 +1,8 @@
 OPERATORS = {
     '+': (1, lambda x, y: x + y),
     '-': (1, lambda x, y: x - y),
-    '~': (2, lambda x: -x)
+    '~': (2, lambda x: -x),
+    'u': (2, lambda x: x)
 }
 
 
@@ -15,6 +16,8 @@ def eval_expression(s: str) -> int:
             if s[i] in '+-()':
                 if s[i] == '-' and (i == 0 or s[i - 1] in '+-~('):
                     yield '~'
+                elif s[i] == '+' and (i == 0 or s[i - 1] in '+-~(u'):
+                    yield 'u'
                 else:
                     yield s[i]
                 i += 1
@@ -42,7 +45,7 @@ def eval_expression(s: str) -> int:
                 if stack:
                     stack.pop()
             else:
-                if token == '~':
+                if token in '~u':
                     while (stack and stack[-1] != '(' and
                            OPERATORS.get(stack[-1], (0,))[0] > OPERATORS[token][0]):
                         output.append(stack.pop())
@@ -65,11 +68,11 @@ def eval_expression(s: str) -> int:
         for token in rpn:
             if isinstance(token, int):
                 stack.append(token)
-            elif token == '~':
+            elif token in ['~', 'u']:  # Handle unary operators
                 if stack:
                     a = stack.pop()
-                    stack.append(-a)
-            else:
+                    stack.append(OPERATORS[token][1](a))
+            else:  # Handle binary operators
                 if len(stack) >= 2:
                     b = stack.pop()
                     a = stack.pop()
@@ -78,9 +81,7 @@ def eval_expression(s: str) -> int:
         return stack[0] if stack else 0
 
     tokens = list(tokenize())
-    print(tokens)
     rpn = shunting_yard(tokens)
-    print(rpn)
     return evaluate(rpn)
 
 
