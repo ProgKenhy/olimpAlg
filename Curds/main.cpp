@@ -48,7 +48,7 @@ void solve() {
         }
         number[x]--;
     }
-    cout << ans;
+    cout << ans << '\n';
 }
 
 int main() {
